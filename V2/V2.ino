@@ -1,3 +1,5 @@
+
+
 int C = 262;
 int Cs = 277;
 int D = 294;
@@ -12,20 +14,41 @@ int As = 466;
 int B = 494;
 int C = 523;
 
-int keyC = 10;
-int keyD = 9;
-int keyE = 8;
-int keyF = 7;
-int keyG = 6;
-int keyA = 5;
-int keyB = 4;
-int highkeyC = 3;
+const int keyC = 10;
+const int keyD = 9;
+const int keyE = 8;
+const int keyF = 7;
+const int keyG = 6;
+const int keyA = 5;
+const int keyB = 4;
+const int highkeyC = 3;
 
-int buzzer = 11;
+const int buzzer = 11;
 
 void setup() {
-  // put your setup code here, to run once:
-  
+  pinMode(keyC, INPUT);
+  digitalWrite(keyC, HIGH);
+
+  pinMode(keyD, INPUT);
+  digitalWrite(keyD, HIGH);
+
+  pinMode(keyE, INPUT);
+  digitalWrite(keyE, HIGH);
+
+  pinMode(keyF, INPUT);
+  digitalWrite(keyF, HIGH);
+
+  pinMode(keyG, INPUT);
+  digitalWrite(keyG, HIGH);
+
+  pinMode(keyA, INPUT);
+  digitalWrite(keyA, HIGH);
+
+  pinMode(keyB, INPUT);
+  digitalWrite(keyB, HIGH);
+
+  pinMode(highkeyC, INPUT);
+  digitalWrite(highkeyC, HIGH);
 }
 
 void loop() {
