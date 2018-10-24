@@ -1,5 +1,7 @@
+//V2: vertical prototype
+//Goal: Allow a user to change the pitch of a buzzer using pushbuttons
 
-
+//Maintaining the ability to change frequencies for our octave button
 int C = 262;
 int Cs = 277;
 int D = 294;
@@ -12,7 +14,7 @@ int Gs = 415;
 int A = 440;
 int As = 466;
 int B = 494;
-int C = 523;
+int highC = 523;
 
 const int keyC = 10;
 const int keyD = 9;
@@ -26,6 +28,7 @@ const int highkeyC = 3;
 const int buzzer = 11;
 
 void setup() {
+  //sets up the pins that connect our pushbuttons
   pinMode(keyC, INPUT);
   digitalWrite(keyC, HIGH);
 
@@ -54,7 +57,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   
-  //If the button is being pressed, places the corresponding note
+  //If the button is being pressed, plays the corresponding note
    while(digitalRead(keyC) == LOW){
       tone(buzzer, C);
    }
