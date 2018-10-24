@@ -53,5 +53,32 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
+  //If the button is being pressed, places the corresponding note
+   while(digitalRead(keyC) == LOW){
+      tone(buzzer, C);
+   }
+   while(digitalRead(keyD) == LOW){
+      tone(buzzer, D);
+   }
+   while(digitalRead(keyE) == LOW){
+      tone(buzzer, E);
+   }
+   while(digitalRead(keyF) == LOW){
+      tone(buzzer, F);
+   }
+   while(digitalRead(keyG) == LOW){
+      tone(buzzer, G);
+   }
+   while(digitalRead(keyA) == LOW){
+      tone(buzzer, A);
+   }
+   while(digitalRead(keyB) == LOW){
+      tone(buzzer, B);
+   }
+
+   //If no button is being pressed, turns off the buzzer.
+   noTone(buzzer);
+   
 
 }
