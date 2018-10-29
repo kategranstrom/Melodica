@@ -1,5 +1,5 @@
-//V2: vertical prototype
-//Goal: Allow a user to change the pitch of a buzzer using pushbuttons
+//E1: evolutionary prototype
+//Goal: Start integrating components to create our Melodica
 #include <toneAC.h>
 
 //Maintaining the ability to change frequencies for our octave button
@@ -35,12 +35,17 @@ const int highkeyC = 17;
 void setup() {
   //sets up the pins that connect our pushbuttons
   
-  
   pinMode(keyC, INPUT);
   digitalWrite(keyC, HIGH);
 
+  pinMode(keyCs, INPUT);
+  digitalWrite(keyCs, HIGH);
+
   pinMode(keyD, INPUT);
   digitalWrite(keyD, HIGH);
+
+  pinMode(keyDs, INPUT);
+  digitalWrite(keyDs, HIGH);
 
   pinMode(keyE, INPUT);
   digitalWrite(keyE, HIGH);
@@ -48,11 +53,20 @@ void setup() {
   pinMode(keyF, INPUT);
   digitalWrite(keyF, HIGH);
 
+  pinMode(keyFs, INPUT);
+  digitalWrite(keyFs, HIGH);
+
   pinMode(keyG, INPUT);
   digitalWrite(keyG, HIGH);
 
+  pinMode(keyGs, INPUT);
+  digitalWrite(keyGs, HIGH);
+
   pinMode(keyA, INPUT);
   digitalWrite(keyA, HIGH);
+
+  pinMode(keyAs, INPUT);
+  digitalWrite(keyAs, HIGH);
 
   pinMode(keyB, INPUT);
   digitalWrite(keyB, HIGH);
