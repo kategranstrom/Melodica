@@ -1,5 +1,6 @@
 //V2: vertical prototype
 //Goal: Allow a user to change the pitch of a buzzer using pushbuttons
+#include <toneAC.h>
 
 //Maintaining the ability to change frequencies for our octave button
 int C = 262;
@@ -16,19 +17,25 @@ int As = 466;
 int B = 494;
 int highC = 523;
 
-const int keyC = 10;
-const int keyD = 9;
-const int keyE = 8;
-const int keyF = 7;
-const int keyG = 6;
-const int keyA = 5;
-const int keyB = 4;
-const int highkeyC = 3;
+const int keyC = 12;
+const int keyCs = 11;
+const int keyD = 8;
+const int keyDs = 7;
+const int keyE = 6;
+const int keyF = 5;
+const int keyFs = 4;
+const int keyG = 3;
+const int keyGs = 2;
+const int keyA = 14;
+const int keyAs = 15;
+const int keyB = 16;
+const int highkeyC = 17;
 
-const int buzzer = 11;
 
 void setup() {
   //sets up the pins that connect our pushbuttons
+  
+  
   pinMode(keyC, INPUT);
   digitalWrite(keyC, HIGH);
 
@@ -59,29 +66,30 @@ void loop() {
   
   //If the button is being pressed, plays the corresponding note
    while(digitalRead(keyC) == LOW){
-      tone(buzzer, C);
+      toneAC(C, 1);
    }
    while(digitalRead(keyD) == LOW){
-      tone(buzzer, D);
+      toneAC( D, 3);
    }
    while(digitalRead(keyE) == LOW){
-      tone(buzzer, E);
+      toneAC(E, 4);
    }
    while(digitalRead(keyF) == LOW){
-      tone(buzzer, F);
+      toneAC( F,6);
    }
    while(digitalRead(keyG) == LOW){
-      tone(buzzer, G);
+      toneAC(G,7);
    }
    while(digitalRead(keyA) == LOW){
-      tone(buzzer, A);
+      toneAC(A, 9);
    }
    while(digitalRead(keyB) == LOW){
-      tone(buzzer, B);
+      toneAC(B, 10);
+      
    }
 
    //If no button is being pressed, turns off the buzzer.
-   noTone(buzzer);
+   noToneAC();
    
 
 }
