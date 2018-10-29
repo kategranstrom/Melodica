@@ -68,28 +68,46 @@ void loop() {
    while(digitalRead(keyC) == LOW){
       toneAC(C, 1);
    }
+   while(digitalRead(keyCs) == LOW){
+      toneAC(Cs, 2);
+   }
    while(digitalRead(keyD) == LOW){
       toneAC( D, 3);
+   }
+   while(digitalRead(keyDs) == LOW){
+      toneAC( Ds, 3);
    }
    while(digitalRead(keyE) == LOW){
       toneAC(E, 4);
    }
    while(digitalRead(keyF) == LOW){
-      toneAC( F,6);
+      toneAC( F,5);
+   }
+   while(digitalRead(keyFs) == LOW){
+      toneAC( Fs,6);
    }
    while(digitalRead(keyG) == LOW){
       toneAC(G,7);
    }
+   while(digitalRead(keyGs) == LOW){
+      toneAC(Gs,8);
+   }
    while(digitalRead(keyA) == LOW){
       toneAC(A, 9);
+   }
+   while(digitalRead(keyAs) == LOW){
+      toneAC(As, 9);
    }
    while(digitalRead(keyB) == LOW){
       toneAC(B, 10);
       
    }
-
+   while(digitalRead(highkeyC) == LOW){
+      toneAC(highC, 10);
+      
+   }
+   
    //If no button is being pressed, turns off the buzzer.
    noToneAC();
-   
 
 }
