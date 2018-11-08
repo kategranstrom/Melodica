@@ -31,6 +31,7 @@ const int keyAs = 15;
 const int keyB = 16;
 const int highkeyC = 17;
 
+int volume = 1;
 
 void setup() {
   //sets up the pins that connect our pushbuttons
@@ -80,44 +81,44 @@ void loop() {
   
   //If the button is being pressed, plays the corresponding note
    while(digitalRead(keyC) == LOW){
-      toneAC(C, 1);
+      toneAC(C, volume);
    }
    while(digitalRead(keyCs) == LOW){
-      toneAC(Cs, 2);
+      toneAC(Cs, volume);
    }
    while(digitalRead(keyD) == LOW){
-      toneAC( D, 3);
+      toneAC( D, volume);
    }
    while(digitalRead(keyDs) == LOW){
-      toneAC( Ds, 3);
+      toneAC( Ds, volume);
    }
    while(digitalRead(keyE) == LOW){
-      toneAC(E, 4);
+      toneAC(E, volume);
    }
    while(digitalRead(keyF) == LOW){
-      toneAC( F,5);
+      toneAC( F,volume);
    }
    while(digitalRead(keyFs) == LOW){
-      toneAC( Fs,6);
+      toneAC( Fs,volume);
    }
    while(digitalRead(keyG) == LOW){
-      toneAC(G,7);
+      toneAC(G,volume);
    }
    while(digitalRead(keyGs) == LOW){
-      toneAC(Gs,8);
+      toneAC(Gs,volume);
    }
    while(digitalRead(keyA) == LOW){
-      toneAC(A, 9);
+      toneAC(A, volume);
    }
    while(digitalRead(keyAs) == LOW){
-      toneAC(As, 9);
+      toneAC(As, volume);
    }
    while(digitalRead(keyB) == LOW){
-      toneAC(B, 10);
+      toneAC(B, volume);
       
    }
    while(digitalRead(highkeyC) == LOW){
-      toneAC(highC, 10);
+      toneAC(highC, volume);
       
    }
    
