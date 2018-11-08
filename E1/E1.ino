@@ -1,4 +1,5 @@
 //E1: evolutionary prototype
+//
 //Goal: Start integrating components to create our Melodica
 #include <toneAC.h>
 
@@ -31,9 +32,19 @@ const int keyAs = 15;
 const int keyB = 16;
 const int highkeyC = 17;
 
+const int RV = 5;
+const int TMP = 4;
+long int lastTime;
+float windSpeed;
+float windOutput;
+float windVolts;
+
 int volume = 1;
 
 void setup() {
+
+  Serial.begin(9600);
+  
   //sets up the pins that connect our pushbuttons
   
   pinMode(keyC, INPUT);
@@ -78,7 +89,17 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  if (millis() - lastTime > 1000) {
+    windOutput = analogRead(RV);
+    windVolts = (windOutput * 0.0048828125);
+
+    windSpeed = pow((windVolts/0.23), 2.7265);
+
+    Serial.print("Wind speed = ");
+    Serial.print((float)windSpeed);
+    Serial.println(" MPH");
+    lastTime = millis();
+  }
   //If the button is being pressed, plays the corresponding note
    while(digitalRead(keyC) == LOW){
       toneAC(C, volume);
