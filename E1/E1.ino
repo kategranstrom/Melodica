@@ -1,6 +1,7 @@
 //E1: evolutionary prototype
-//
 //Goal: Start integrating components to create our Melodica
+//Wind sensor calculations based on the program WindSensor.ino by Paul Badger:
+//https://github.com/moderndevice/Wind_Sensor/blob/master/WindSensor/WindSensor.ino
 #include <toneAC.h>
 
 //Maintaining the ability to change frequencies for our octave button
@@ -37,13 +38,19 @@ const int TMP = 4;
 long int lastTime;
 float windSpeed;
 float windOutput;
+int tempOutput; 
 float windVolts;
+float windAdjustment = 0.2;
+float zeroWindOutput;
+float zeroWindVolts;
+
+
 
 int volume = 1;
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(57600);
   
   //sets up the pins that connect our pushbuttons
   
@@ -89,11 +96,15 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (millis() - lastTime > 1000) {
+  if (millis() - lastTime > 200) {
+    tempOutput = analogRead(TMP);
     windOutput = analogRead(RV);
     windVolts = (windOutput * 0.0048828125);
 
-    windSpeed = pow((windVolts/0.23), 2.7265);
+    zeroWindOutput = -0.0006*(pow((float)tempOutput , 2)) + 1.0727*(float)tempOutput + 47.172;
+    zeroWindVolts = (zeroWindOutput * 0.0048828125) - windAdjustment;
+
+    windSpeed = pow(((windVolts-zeroWindVolts)/0.23), 2.7265);
 
     Serial.print("Wind speed = ");
     Serial.print((float)windSpeed);
@@ -147,3 +158,4 @@ void loop() {
    noToneAC();
 
 }
+
