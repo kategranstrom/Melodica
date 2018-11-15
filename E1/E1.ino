@@ -110,52 +110,58 @@ void loop() {
     Serial.print((float)windSpeed);
     Serial.println(" MPH");
     lastTime = millis();
+    volume = (int)(windSpeed*0.6666);
+     
+    
   }
   //If the button is being pressed, plays the corresponding note
-   while(digitalRead(keyC) == LOW){
+   if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
    }
-   while(digitalRead(keyCs) == LOW){
+   
+   if(digitalRead(keyCs) == LOW){
       toneAC(Cs, volume);
    }
-   while(digitalRead(keyD) == LOW){
+   if(digitalRead(keyD) == LOW){
       toneAC( D, volume);
    }
-   while(digitalRead(keyDs) == LOW){
+   if(digitalRead(keyDs) == LOW){
       toneAC( Ds, volume);
    }
-   while(digitalRead(keyE) == LOW){
+   if(digitalRead(keyE) == LOW){
       toneAC(E, volume);
    }
-   while(digitalRead(keyF) == LOW){
+   if(digitalRead(keyF) == LOW){
       toneAC( F,volume);
    }
-   while(digitalRead(keyFs) == LOW){
+   if(digitalRead(keyFs) == LOW){
       toneAC( Fs,volume);
    }
-   while(digitalRead(keyG) == LOW){
+   if(digitalRead(keyG) == LOW){
       toneAC(G,volume);
    }
-   while(digitalRead(keyGs) == LOW){
+   if(digitalRead(keyGs) == LOW){
       toneAC(Gs,volume);
    }
-   while(digitalRead(keyA) == LOW){
+   if(digitalRead(keyA) == LOW){
       toneAC(A, volume);
    }
-   while(digitalRead(keyAs) == LOW){
+   if(digitalRead(keyAs) == LOW){
       toneAC(As, volume);
    }
-   while(digitalRead(keyB) == LOW){
+   if(digitalRead(keyB) == LOW){
       toneAC(B, volume);
       
    }
-   while(digitalRead(highkeyC) == LOW){
+   if(digitalRead(highkeyC) == LOW){
       toneAC(highC, volume);
       
    }
    
    //If no button is being pressed, turns off the buzzer.
-   noToneAC();
+   if (digitalRead(keyC) == HIGH && digitalRead(keyCs) == HIGH && digitalRead(keyD) == HIGH && digitalRead(keyDs) == HIGH && digitalRead(keyE) == HIGH && digitalRead(keyF) == HIGH && digitalRead(keyFs) == HIGH && digitalRead(keyG) == HIGH && digitalRead(keyGs) == HIGH && digitalRead(keyA) == HIGH && digitalRead(keyAs) == HIGH && digitalRead(keyB) == HIGH && digitalRead(highkeyC) == HIGH){
+      noToneAC();
+   }
+   
 
 }
-
