@@ -33,6 +33,8 @@ const int keyAs = 15;
 const int keyB = 16;
 const int highkeyC = 17;
 
+const int RP = 13;
+
 const int RV = 5;
 const int TMP = 4;
 long int lastTime;
@@ -45,6 +47,10 @@ float zeroWindOutput;
 float zeroWindVolts;
 
 
+int recording = 0;
+int record[100] = {0};
+int rlength = 0;
+int count = 0;
 
 int volume = 1;
 
@@ -92,11 +98,18 @@ void setup() {
 
   pinMode(highkeyC, INPUT);
   digitalWrite(highkeyC, HIGH);
+
+  pinMode(RP, INPUT);
+  digitalWrite(RP, HIGH);
+
+
 }
+
+
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (millis() - lastTime > 200) {
+  if (millis() - lastTime > 1) {
     tempOutput = analogRead(TMP);
     windOutput = analogRead(RV);
     windVolts = (windOutput * 0.0048828125);
@@ -106,56 +119,162 @@ void loop() {
 
     windSpeed = pow(((windVolts-zeroWindVolts)/0.23), 2.7265);
 
-    Serial.print("Wind speed = ");
-    Serial.print((float)windSpeed);
-    Serial.println(" MPH");
+    //Serial.print("Wind speed = ");
+    //Serial.print((float)windSpeed);
+    //Serial.println(" MPH");
     lastTime = millis();
     volume = (int)(windSpeed*0.6666);
      
     
   }
   //If the button is being pressed, plays the corresponding note
+  if (digitalRead(RP) == LOW){
+      volume = 1;
+      toneAC(C, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(F, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(A, volume);
+      delay(450);
+      noToneAC();
+      delay(25);
+      toneAC(A, volume);
+      delay(450);
+      toneAC(G, volume);
+      delay(900);
+      toneAC(C, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(F, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(G, volume);
+      delay(450);
+      noToneAC();
+      delay(25);
+      toneAC(G, volume);
+      delay(450);
+      toneAC(F, volume);
+      delay(450);
+      toneAC(E, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(300);
+      toneAC(C, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(F, volume);
+      delay(150);
+      toneAC(D, volume);
+      delay(150);
+      toneAC(F, volume);
+      delay(600);
+      toneAC(G, volume);
+      delay(300);
+      toneAC(E, volume);
+      delay(450);
+
+      toneAC(D, volume);
+      delay(150);
+      toneAC(C, volume);
+      delay(300);
+      toneAC(C, volume);
+      delay(300);
+      noToneAC();
+      delay(25);
+      toneAC(C, volume);
+      delay(300);
+      toneAC(G, volume);
+      delay(600);
+      toneAC(F, volume);
+      delay(1200);
+ 
+  }
+  
    if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
+      if(record) record[rlength++] = C;
    }
    
    if(digitalRead(keyCs) == LOW){
       toneAC(Cs, volume);
+      if(record) record[rlength++] = Cs;
    }
    if(digitalRead(keyD) == LOW){
       toneAC( D, volume);
+      if(record) record[rlength++] = D;
    }
    if(digitalRead(keyDs) == LOW){
       toneAC( Ds, volume);
+      if(record) record[rlength++] = Ds;
    }
    if(digitalRead(keyE) == LOW){
       toneAC(E, volume);
+      if(record) record[rlength++] = E;
    }
    if(digitalRead(keyF) == LOW){
       toneAC( F,volume);
+      if(record) record[rlength++] = F;
    }
    if(digitalRead(keyFs) == LOW){
       toneAC( Fs,volume);
+      if(record) record[rlength++] = Fs;
    }
    if(digitalRead(keyG) == LOW){
       toneAC(G,volume);
+      if(record) record[rlength++] = G;
    }
    if(digitalRead(keyGs) == LOW){
       toneAC(Gs,volume);
+      if(record) record[rlength++] = Gs;
    }
    if(digitalRead(keyA) == LOW){
       toneAC(A, volume);
+      if(record) record[rlength++] = A;
    }
    if(digitalRead(keyAs) == LOW){
       toneAC(As, volume);
+      if(record) record[rlength++] = As;
    }
    if(digitalRead(keyB) == LOW){
       toneAC(B, volume);
+      if(record) record[rlength++] = B;
       
    }
    if(digitalRead(highkeyC) == LOW){
       toneAC(highC, volume);
+      if(record) record[rlength++] = highC;
       
+   }
+   while(digitalRead(RP) == LOW) {
+    delay(100);
+    count += 100;
+    Serial.println(count);
+   }
+   
+   if(count >= 100 && !recording) {
+    if(!recording) {
+    Serial.println("start recording");
+      recording = 1;
+      //delay(200);
+    }
+    count = 0;
+   }
+   
+   if(count >= 100 && recording) {
+     Serial.println("stop recording");
+     if(recording) {
+       recording = 0;
+     }
+    count = 0;
+    //delay(1000);
    }
    
    //If no button is being pressed, turns off the buzzer.
