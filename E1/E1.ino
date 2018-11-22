@@ -50,6 +50,7 @@ int recording = 0;
 int record[100] = {0};
 int rlength = 0;
 int count = 0;
+int lastNote = 0;
 
 int volume = 1;
 
@@ -120,73 +121,65 @@ void loop() {
   //If the button is being pressed, plays the corresponding note
    if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
-      if(recording == 1) {
-        Serial.print("recording C");
-        record[rlength++] = C;
-      }
+      lastNote = C;
    }
    
    if(digitalRead(keyCs) == LOW){
       toneAC(Cs, volume);
-      if(recording) {
-        Serial.print("recording Cs");
-        record[rlength++] = Cs;
-      }
+      lastNote = Cs;
    }
    if(digitalRead(keyD) == LOW){
       toneAC( D, volume);
-      if(recording) record[rlength++] = D;
+      lastNote = D;
    }
    if(digitalRead(keyDs) == LOW){
       toneAC( Ds, volume);
-      if(recording) record[rlength++] = Ds;
+      lastNote = Ds;
    }
    if(digitalRead(keyE) == LOW){
       toneAC(E, volume);
-      if(recording) record[rlength++] = E;
+      lastNote = E;
    }
    if(digitalRead(keyF) == LOW){
       toneAC( F,volume);
-      if(recording) {
-        Serial.print("recording F");
-        record[rlength++] = F;
-      }
+      lastNote = F;
    }
    if(digitalRead(keyFs) == LOW){
       toneAC( Fs,volume);
-      if(recording) record[rlength++] = Fs;
+      lastNote = Fs;
    }
    if(digitalRead(keyG) == LOW){
       toneAC(G,volume);
-      if(recording) record[rlength++] = G;
+      lastNote = G;
    }
    if(digitalRead(keyGs) == LOW){
       toneAC(Gs,volume);
-      if(recording) record[rlength++] = Gs;
+      lastNote = Gs;
    }
    if(digitalRead(keyA) == LOW){
       toneAC(A, volume);
-      if(recording) record[rlength++] = A;
+      lastNote = A;
    }
    if(digitalRead(keyAs) == LOW){
       toneAC(As, volume);
-      if(recording) record[rlength++] = As;
+      lastNote = As;
    }
    if(digitalRead(keyB) == LOW){
       toneAC(B, volume);
-      if(recording) record[rlength++] = B;
+      lastNote = B;
       
    }
    if(digitalRead(highkeyC) == LOW){
       toneAC(highC, volume);
-      if(recording) record[rlength++] = highC;
+      lastNote = highC;
       
    }
       
    //If no button is being pressed, turns off the buzzer.
    if (digitalRead(keyC) == HIGH && digitalRead(keyCs) == HIGH && digitalRead(keyD) == HIGH && digitalRead(keyDs) == HIGH && digitalRead(keyE) == HIGH && digitalRead(keyF) == HIGH && digitalRead(keyFs) == HIGH && digitalRead(keyG) == HIGH && digitalRead(keyGs) == HIGH && digitalRead(keyA) == HIGH && digitalRead(keyAs) == HIGH && digitalRead(keyB) == HIGH && digitalRead(highkeyC) == HIGH){
       noToneAC();
-   }
+      if(recording && lastNote && record[rlength-1] != lastNote)record[rlength++] = lastNote;
+ 
 
    while(digitalRead(RP) == LOW) {
     delay(10);
@@ -194,26 +187,26 @@ void loop() {
     Serial.println(count);
    }
    Serial.println(recording);
-   if(count >= 10 && count < 2000 && recording == 0) {
+   if(count >= 10 && count < 1000 && recording == 0) {
     Serial.println("start recording");
       recording = 1;
       //delay(200);
     count = 0;
    }
 
-   if(count >= 10 && count < 2000 && recording == 1) {
+   if(count >= 10 && count < 1000 && recording == 1) {
      Serial.println("stop recording");
      recording = 0;
      count = 0;
     //delay(1000);
    }
 
-   if(count >= 2000 && count < 6000) {
+   if(count >= 1000 && count < 6000) {
     volume = 1;
     Serial.println("playBack");
     for(int i = 0; i < rlength; i++) {
       toneAC(record[i], volume);
-      delay(100);
+      delay(400);
       noToneAC();
       delay(25);
     }
