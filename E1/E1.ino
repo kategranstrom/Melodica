@@ -1,10 +1,10 @@
-//E1: evolutionary prototype
-//Goal: Start integrating components to create our Melodica
+//Melodica
 //Wind sensor calculations based on the program WindSensor.ino by Paul Badger:
 //https://github.com/moderndevice/Wind_Sensor/blob/master/WindSensor/WindSensor.ino
 #include <toneAC.h>
 
-//Maintaining the ability to change frequencies for our octave button
+//these are the frequencies for each key on the piano
+//our octave button is able to increase/decrease these
 float C = 262;
 float Cs = 277;
 float D = 294;
@@ -19,7 +19,7 @@ float As = 466;
 float B = 494;
 float highC = 523;
 
-
+//the pins used by the arduino for each piano key
 const int keyC = 12;
 const int keyCs = 11;
 const int keyD = 8;
@@ -34,13 +34,16 @@ const int keyAs = 15;
 const int keyB = 16;
 const int highkeyC = 17;
 
+//buttons for octave up and octave down
 const int up = 1;
 const int down = 0;
 
+//pins for our wind sensor
 const int RP = 13;
 const int RV = 5;
 const int TMP = 4;
 
+//these variables are used in the calculation of wind speed
 long int lastTime;
 float windSpeed;
 float windOutput;
@@ -50,6 +53,8 @@ float windAdjustment = 0.2;
 float zeroWindOutput;
 float zeroWindVolts;
 
+//keep track of when we are recording and hen we are not and store information on note name, note duration, 
+//and duration of rest between notes
 int recording = 0;
 int record[100] = {0};
 int duration[100] = {0};
@@ -57,19 +62,15 @@ int restDuration[100] = {0};
 int rlength = 0;
 int count = 0;
 int lastNote = 0;
-int jump = 0;
-
-int volume = 0;
-
 int startNote = 0;
 int stopNote = 0;
 int startRest = 0;
 int stopRest = 0;
 
+int volume = 0;
 
 void setup() {
-  //Serial.begin(57600);
-  
+    
   //sets up the pins that connect our pushbuttons
   
   pinMode(keyC, INPUT);
@@ -116,12 +117,9 @@ void setup() {
 
   pinMode(down, INPUT);
   digitalWrite(down, HIGH);
-  
-  //pinMode(RP, INPUT);
-  //digitalWrite(RP, HIGH);
 }
 void loop() {
-  // put your main code here, to run repeatedly:
+  // calculations for windspeed
   if (millis() - lastTime > 200) {
     tempOutput = analogRead(TMP);
     windOutput = analogRead(RV);
@@ -129,15 +127,12 @@ void loop() {
     zeroWindOutput = -0.0006*(pow((float)tempOutput , 2)) + 1.0727*(float)tempOutput + 47.172;
     zeroWindVolts = (zeroWindOutput * 0.0048828125) - windAdjustment;
     windSpeed = pow(((windVolts-zeroWindVolts)/0.23), 2.7265);
-    //Serial.print("Wind speed = ");
-    //Serial.print((float)windSpeed);
-    //Serial.println(" MPH");
     lastTime = millis();
     volume = (int)(windSpeed*0.6666);
-     
-    
   }
+  
   //If the button is being pressed, plays the corresponding note
+  //keep track of when the rest ends and note starts
    if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
       if (lastNote != (int) C) {
@@ -247,6 +242,7 @@ void loop() {
    }
       
    //If no button is being pressed, turns off the buzzer.
+   //keep track of stopping note and starting rest for the purpose of recording and playback
    if (digitalRead(keyC) == HIGH && digitalRead(keyCs) == HIGH && digitalRead(keyD) == HIGH && digitalRead(keyDs) == HIGH && digitalRead(keyE) == HIGH && digitalRead(keyF) == HIGH && digitalRead(keyFs) == HIGH && digitalRead(keyG) == HIGH && digitalRead(keyGs) == HIGH && digitalRead(keyA) == HIGH && digitalRead(keyAs) == HIGH && digitalRead(keyB) == HIGH && digitalRead(highkeyC) == HIGH){
       noToneAC();
       if(recording && lastNote){
@@ -260,7 +256,7 @@ void loop() {
       lastNote = 0;
    }
  
-
+  //keep track of time a button is pressed for multifunction
    while(digitalRead(RP) == LOW) {
     delay(10);
     count += 10;
@@ -274,6 +270,7 @@ void loop() {
     count = 0;
    }
 
+  //if pressed for less than one second and not recording then start recording
    if(count >= 10 && count < 1000 && recording == 1) {
      //Serial.println("stop recording");
      recording = 0;
@@ -281,6 +278,7 @@ void loop() {
     //delay(1000);
    }
 
+  //if pressed for less than one second and recording then stop recording
    if(count >= 1000 && count < 6000) {
     volume = 1;
     //Serial.println("playBack");
@@ -294,7 +292,6 @@ void loop() {
 
    if (digitalRead(up) == LOW) {
     //increase octave
-    //jump = 440;
     float exponent = 1.0/12;
     if (millis() - lastTime > 200 && C < 2000) {
       C = highC;
@@ -317,7 +314,6 @@ void loop() {
 
    if (digitalRead(down) == LOW) {
     //decrease octave
-    //jump = -220;
     float exponent = 1.0/12;
     if (millis() - lastTime > 200 && C > 20) {
       highC = C;
@@ -335,40 +331,9 @@ void loop() {
       C = Cs/pow(2, exponent);
       lastTime = millis();
     }
-    /*if (millis() - lastTime > 200 && C == 262) {
-      C = 131;
-      Cs = 139;
-      D = 147;
-      Ds = 156;
-      E = 165;
-      F = 175;
-      Fs = 185;
-      G = 196;
-      Gs = 208;
-      A = 220;
-      As = 233;
-      B = 247;
-      highC = 262;
-      lastTime = millis();
-    }
-    if (millis() - lastTime > 200 && C == 523) {
-      C = 262;
-      Cs = 277;
-      D = 294;
-      Ds = 311;
-      E = 330;
-      F = 349;
-      Fs = 370;
-      G = 392;
-      Gs = 415;
-      A = 440;
-      As = 466;
-      B = 494;
-      highC = 523; 
-      lastTime = millis();    
-    }*/
   }
 
+  //special feature if button pressed for more than 6 seconds
    if (count > 6000){
       volume = 1;
       toneAC(C, volume);
