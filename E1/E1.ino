@@ -19,6 +19,7 @@ int As = 466;
 int B = 494;
 int highC = 523;
 
+
 const int keyC = 12;
 const int keyCs = 11;
 const int keyD = 8;
@@ -32,6 +33,9 @@ const int keyA = 14;
 const int keyAs = 15;
 const int keyB = 16;
 const int highkeyC = 17;
+
+const int up = 1;
+const int down = 0;
 
 const int RP = 13;
 const int RV = 5;
@@ -48,14 +52,23 @@ float zeroWindVolts;
 
 int recording = 0;
 int record[100] = {0};
+int duration[100] = {0};
+int restDuration[100] = {0};
 int rlength = 0;
 int count = 0;
 int lastNote = 0;
+int jump = 0;
 
 int volume = 1;
 
+int startNote = 0;
+int stopNote = 0;
+int startRest = 0;
+int stopRest = 0;
+
+
 void setup() {
-  Serial.begin(57600);
+  //Serial.begin(57600);
   
   //sets up the pins that connect our pushbuttons
   
@@ -97,6 +110,12 @@ void setup() {
   
   pinMode(highkeyC, INPUT);
   digitalWrite(highkeyC, HIGH);
+
+  pinMode(up, INPUT);
+  digitalWrite(up, HIGH);
+
+  pinMode(down, INPUT);
+  digitalWrite(down, HIGH);
   
   //pinMode(RP, INPUT);
   //digitalWrite(RP, HIGH);
@@ -110,9 +129,9 @@ void loop() {
     zeroWindOutput = -0.0006*(pow((float)tempOutput , 2)) + 1.0727*(float)tempOutput + 47.172;
     zeroWindVolts = (zeroWindOutput * 0.0048828125) - windAdjustment;
     windSpeed = pow(((windVolts-zeroWindVolts)/0.23), 2.7265);
-    Serial.print("Wind speed = ");
-    Serial.print((float)windSpeed);
-    Serial.println(" MPH");
+    //Serial.print("Wind speed = ");
+    //Serial.print((float)windSpeed);
+    //Serial.println(" MPH");
     lastTime = millis();
     volume = (int)(windSpeed*0.6666);
      
@@ -121,56 +140,108 @@ void loop() {
   //If the button is being pressed, plays the corresponding note
    if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
+      if (lastNote != C) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = C;
    }
    
    if(digitalRead(keyCs) == LOW){
       toneAC(Cs, volume);
+      if (lastNote != Cs) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = Cs;
    }
    if(digitalRead(keyD) == LOW){
       toneAC( D, volume);
+      if (lastNote != D) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = D;
    }
    if(digitalRead(keyDs) == LOW){
       toneAC( Ds, volume);
+      if (lastNote != Ds) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = Ds;
    }
    if(digitalRead(keyE) == LOW){
       toneAC(E, volume);
+      if (lastNote != E) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = E;
    }
    if(digitalRead(keyF) == LOW){
       toneAC( F,volume);
+      if (lastNote != F) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = F;
    }
    if(digitalRead(keyFs) == LOW){
       toneAC( Fs,volume);
+      if (lastNote != Fs) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = Fs;
    }
    if(digitalRead(keyG) == LOW){
       toneAC(G,volume);
+      if (lastNote != G) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = G;
    }
    if(digitalRead(keyGs) == LOW){
       toneAC(Gs,volume);
+      if (lastNote != Gs) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = Gs;
    }
    if(digitalRead(keyA) == LOW){
       toneAC(A, volume);
+      if (lastNote != A) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = A;
    }
    if(digitalRead(keyAs) == LOW){
       toneAC(As, volume);
+      if (lastNote != As) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = As;
    }
    if(digitalRead(keyB) == LOW){
       toneAC(B, volume);
+      if (lastNote != B) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = B;
       
    }
    if(digitalRead(highkeyC) == LOW){
       toneAC(highC, volume);
+      if (lastNote != highC) {
+        stopRest = millis();
+        startNote = millis();
+      }
       lastNote = highC;
       
    }
@@ -178,24 +249,33 @@ void loop() {
    //If no button is being pressed, turns off the buzzer.
    if (digitalRead(keyC) == HIGH && digitalRead(keyCs) == HIGH && digitalRead(keyD) == HIGH && digitalRead(keyDs) == HIGH && digitalRead(keyE) == HIGH && digitalRead(keyF) == HIGH && digitalRead(keyFs) == HIGH && digitalRead(keyG) == HIGH && digitalRead(keyGs) == HIGH && digitalRead(keyA) == HIGH && digitalRead(keyAs) == HIGH && digitalRead(keyB) == HIGH && digitalRead(highkeyC) == HIGH){
       noToneAC();
-      if(recording && lastNote && record[rlength-1] != lastNote)record[rlength++] = lastNote;
+      if(recording && lastNote){
+        stopNote = millis();
+        record[rlength] = lastNote;
+        duration[rlength] = stopNote - startNote;
+        restDuration[rlength++] = stopRest - startRest;
+        startRest = millis();
+
+      }
+      lastNote = 0;
+   }
  
 
    while(digitalRead(RP) == LOW) {
     delay(10);
     count += 10;
-    Serial.println(count);
+    //Serial.println(count);
    }
-   Serial.println(recording);
+   //Serial.println(recording);
    if(count >= 10 && count < 1000 && recording == 0) {
-    Serial.println("start recording");
+    //Serial.println("start recording");
       recording = 1;
       //delay(200);
     count = 0;
    }
 
    if(count >= 10 && count < 1000 && recording == 1) {
-     Serial.println("stop recording");
+     //Serial.println("stop recording");
      recording = 0;
      count = 0;
     //delay(1000);
@@ -203,15 +283,90 @@ void loop() {
 
    if(count >= 1000 && count < 6000) {
     volume = 1;
-    Serial.println("playBack");
+    //Serial.println("playBack");
     for(int i = 0; i < rlength; i++) {
-      toneAC(record[i], volume);
-      delay(400);
+      toneAC(record[i], volume,duration[i]);
       noToneAC();
-      delay(25);
+      delay(restDuration[i+1]);
     }
     count = 0;
    }
+
+   if (digitalRead(up) == LOW) {
+    //increase octave
+    jump = 440;
+    if (millis() - lastTime > 200 && C == 262) {
+      C = 523;
+      Cs = 554;
+      D = 587;
+      Ds = 622;
+      E = 659;
+      F = 699;
+      Fs = 740;
+      G = 784;
+      Gs = 831;
+      A = 880;
+      As = 932;
+      B = 988;
+      highC = 1047;
+      lastTime = millis();
+    }
+    if (millis() - lastTime > 200 && C == 131) {
+      C = 262;
+      Cs = 277;
+      D = 294;
+      Ds = 311;
+      E = 330;
+      F = 349;
+      Fs = 370;
+      G = 392;
+      Gs = 415;
+      A = 440;
+      As = 466;
+      B = 494;
+      highC = 523; 
+      lastTime = millis();    
+    }
+    
+   }
+
+
+   if (digitalRead(down) == LOW) {
+    //decrease octave
+    jump = -220;
+    if (millis() - lastTime > 200 && C == 262) {
+      C = 131;
+      Cs = 139;
+      D = 147;
+      Ds = 156;
+      E = 165;
+      F = 175;
+      Fs = 185;
+      G = 196;
+      Gs = 208;
+      A = 220;
+      As = 233;
+      B = 247;
+      highC = 262;
+      lastTime = millis();
+    }
+    if (millis() - lastTime > 200 && C == 523) {
+      C = 262;
+      Cs = 277;
+      D = 294;
+      Ds = 311;
+      E = 330;
+      F = 349;
+      Fs = 370;
+      G = 392;
+      Gs = 415;
+      A = 440;
+      As = 466;
+      B = 494;
+      highC = 523; 
+      lastTime = millis();    
+    }
+  }
 
    if (count > 6000){
       volume = 1;
