@@ -5,19 +5,19 @@
 #include <toneAC.h>
 
 //Maintaining the ability to change frequencies for our octave button
-int C = 262;
-int Cs = 277;
-int D = 294;
-int Ds = 311;
-int E = 330;
-int F = 349;
-int Fs = 370;
-int G = 392;
-int Gs = 415;
-int A = 440;
-int As = 466;
-int B = 494;
-int highC = 523;
+float C = 262;
+float Cs = 277;
+float D = 294;
+float Ds = 311;
+float E = 330;
+float F = 349;
+float Fs = 370;
+float G = 392;
+float Gs = 415;
+float A = 440;
+float As = 466;
+float B = 494;
+float highC = 523;
 
 
 const int keyC = 12;
@@ -59,7 +59,7 @@ int count = 0;
 int lastNote = 0;
 int jump = 0;
 
-int volume = 1;
+int volume = 0;
 
 int startNote = 0;
 int stopNote = 0;
@@ -140,109 +140,109 @@ void loop() {
   //If the button is being pressed, plays the corresponding note
    if(digitalRead(keyC) == LOW){
       toneAC(C, volume);
-      if (lastNote != C) {
+      if (lastNote != (int) C) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = C;
+      lastNote = (int) C;
    }
    
    if(digitalRead(keyCs) == LOW){
       toneAC(Cs, volume);
-      if (lastNote != Cs) {
+      if (lastNote != (int)Cs) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = Cs;
+      lastNote = (int) Cs;
    }
    if(digitalRead(keyD) == LOW){
       toneAC( D, volume);
-      if (lastNote != D) {
+      if (lastNote != (int) D) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = D;
+      lastNote = (int)D;
    }
    if(digitalRead(keyDs) == LOW){
       toneAC( Ds, volume);
-      if (lastNote != Ds) {
+      if (lastNote != (int)Ds) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = Ds;
+      lastNote = (int)Ds;
    }
    if(digitalRead(keyE) == LOW){
       toneAC(E, volume);
-      if (lastNote != E) {
+      if (lastNote != (int)E) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = E;
+      lastNote = (int)E;
    }
    if(digitalRead(keyF) == LOW){
       toneAC( F,volume);
-      if (lastNote != F) {
+      if (lastNote != (int)F) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = F;
+      lastNote = (int)F;
    }
    if(digitalRead(keyFs) == LOW){
       toneAC( Fs,volume);
-      if (lastNote != Fs) {
+      if (lastNote != (int)Fs) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = Fs;
+      lastNote = (int)Fs;
    }
    if(digitalRead(keyG) == LOW){
       toneAC(G,volume);
-      if (lastNote != G) {
+      if (lastNote != (int)G) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = G;
+      lastNote = (int)G;
    }
    if(digitalRead(keyGs) == LOW){
       toneAC(Gs,volume);
-      if (lastNote != Gs) {
+      if (lastNote != (int)Gs) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = Gs;
+      lastNote = (int)Gs;
    }
    if(digitalRead(keyA) == LOW){
       toneAC(A, volume);
-      if (lastNote != A) {
+      if (lastNote != (int)A) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = A;
+      lastNote = (int)A;
    }
    if(digitalRead(keyAs) == LOW){
       toneAC(As, volume);
-      if (lastNote != As) {
+      if (lastNote != (int)As) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = As;
+      lastNote = (int)As;
    }
    if(digitalRead(keyB) == LOW){
       toneAC(B, volume);
-      if (lastNote != B) {
+      if (lastNote != (int)B) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = B;
+      lastNote = (int)B;
       
    }
    if(digitalRead(highkeyC) == LOW){
       toneAC(highC, volume);
-      if (lastNote != highC) {
+      if (lastNote != (int)highC) {
         stopRest = millis();
         startNote = millis();
       }
-      lastNote = highC;
+      lastNote = (int)highC;
       
    }
       
@@ -294,47 +294,48 @@ void loop() {
 
    if (digitalRead(up) == LOW) {
     //increase octave
-    jump = 440;
-    if (millis() - lastTime > 200 && C == 262) {
-      C = 523;
-      Cs = 554;
-      D = 587;
-      Ds = 622;
-      E = 659;
-      F = 699;
-      Fs = 740;
-      G = 784;
-      Gs = 831;
-      A = 880;
-      As = 932;
-      B = 988;
+    //jump = 440;
+    float exponent = 1.0/12;
+    if (millis() - lastTime > 200 && C < 2000) {
+      C = highC;
+      Cs = C*pow(2, exponent);
+      D = Cs*pow(2, exponent);
+      Ds = D*pow(2, exponent);
+      E = Ds*pow(2, exponent);
+      F = E*pow(2, exponent);
+      Fs = F*pow(2, exponent);
+      G = Fs*pow(2, exponent);
+      Gs = G*pow(2, exponent);
+      A = Gs*pow(2, exponent);
+      As = A*pow(2, exponent);
+      B = As*pow(2, exponent);
       highC = 1047;
       lastTime = millis();
     }
-    if (millis() - lastTime > 200 && C == 131) {
-      C = 262;
-      Cs = 277;
-      D = 294;
-      Ds = 311;
-      E = 330;
-      F = 349;
-      Fs = 370;
-      G = 392;
-      Gs = 415;
-      A = 440;
-      As = 466;
-      B = 494;
-      highC = 523; 
-      lastTime = millis();    
-    }
-    
    }
 
 
    if (digitalRead(down) == LOW) {
     //decrease octave
-    jump = -220;
-    if (millis() - lastTime > 200 && C == 262) {
+    //jump = -220;
+    float exponent = 1.0/12;
+    if (millis() - lastTime > 200 && C > 20) {
+      highC = C;
+      B = highC/pow(2, exponent);
+      As = B/pow(2, exponent);
+      A = As/pow(2, exponent);
+      Gs = A/pow(2, exponent);
+      G = Gs/pow(2, exponent);
+      Fs = G/pow(2, exponent);
+      F = Fs/pow(2, exponent);
+      E = F/pow(2, exponent);
+      Ds = E/pow(2, exponent);
+      D = Ds/pow(2, exponent);
+      Cs = D/pow(2, exponent);
+      C = Cs/pow(2, exponent);
+      lastTime = millis();
+    }
+    /*if (millis() - lastTime > 200 && C == 262) {
       C = 131;
       Cs = 139;
       D = 147;
@@ -365,7 +366,7 @@ void loop() {
       B = 494;
       highC = 523; 
       lastTime = millis();    
-    }
+    }*/
   }
 
    if (count > 6000){
